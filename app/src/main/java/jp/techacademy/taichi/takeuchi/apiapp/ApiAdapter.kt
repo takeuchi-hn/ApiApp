@@ -1,5 +1,6 @@
 package jp.techacademy.taichi.takeuchi.apiapp
 
+
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,11 @@ class ApiAdapter(private val context: Context): RecyclerView.Adapter<RecyclerVie
     // 取得したJsonデータを解析し、Shop型オブジェクトとして生成したものを格納するリスト
     private val items = mutableListOf<Shop>()
 
+    // 一覧画面から登録するときのコールバック（FavoriteFragmentへ通知するメソッド)
+    var onClickAddFavorite: ((Shop) -> Unit)? = null
+    // 一覧画面から削除するときのコールバック（ApiFragmentへ通知するメソッド)
+    var onClickDeleteFavorite: ((Shop) -> Unit)? = null
+
     // 表示リスト更新時に呼び出すメソッド
     fun refresh(list: List<Shop>) {
         items.apply {
@@ -25,15 +31,12 @@ class ApiAdapter(private val context: Context): RecyclerView.Adapter<RecyclerVie
         notifyDataSetChanged() // recyclerViewを再描画させる
     }
 
-    // ReyclerViewで表示させるViewHolderを作成(必要な数が揃うまで）
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         // ViewHolderを継承したApiItemViewHolderオブジェクトを生成し戻す
         return ApiItemViewHolder(LayoutInflater.from(context).inflate(R.layout.recycler_favorite, parent, false))
     }
 
     // ViewHolderを継承したApiItemViewHolderクラスの定義
-    // RecyclerViewで表示させる1つ1つのセルのViewとなり
-    // 必要な行数分だけonCreateViewHolder()メソッドで生成され、使いまわされる
     class ApiItemViewHolder(view: View): RecyclerView.ViewHolder(view) {
         // レイアウトファイルからidがrootViewのConstraintLayoutオブジェクトを取得し、代入
         val rootView : ConstraintLayout = view.findViewById(R.id.rootView)
@@ -53,17 +56,17 @@ class ApiAdapter(private val context: Context): RecyclerView.Adapter<RecyclerVie
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ApiItemViewHolder) {
             // 生成されたViewHolderがApiItemViewHolderだったら。。。
-            // itemsからposition番のデータを取得して、ViewHolderの描画
             updateApiItemViewHolder(holder, position)
         }// {
         // 別のViewHolderをバインドさせることが可能となる
         // }
     }
 
-    // ApiItemViewHolderの更新
     private fun updateApiItemViewHolder(holder: ApiItemViewHolder, position: Int) {
         // 生成されたViewHolderの位置を指定し、オブジェクトを代入
         val data = items[position]
+        // お気に入り状態を取得
+        val isFavorite = FavoriteShop.findBy(data.id) != null
         holder.apply {
             rootView.apply {
                 // 偶数番目と奇数番目で背景色を変更させる
@@ -75,7 +78,17 @@ class ApiAdapter(private val context: Context): RecyclerView.Adapter<RecyclerVie
             // Picassoライブラリを使い、imageViewにdata.logoImageのurlの画像を読み込ませる
             Picasso.get().load(data.logoImage).into(imageView)
             // 白抜きの星マークの画像を指定
-            favoriteImageView.setImageResource(R.drawable.ic_star_border)
+            favoriteImageView.apply {
+                setImageResource(if (isFavorite) R.drawable.ic_star else R.drawable.ic_star_border) // Picassoというライブラリを使ってImageVIewに画像をはめ込む
+                setOnClickListener {
+                    if (isFavorite) {
+                        onClickDeleteFavorite?.invoke(data)
+                    } else {
+                        onClickAddFavorite?.invoke(data)
+                    }
+                    notifyItemChanged(position)
+                }
+            }
         }
     }
 }
