@@ -1,16 +1,14 @@
 package jp.techacademy.taichi.takeuchi.apiapp
 
 import com.google.gson.annotations.SerializedName
-
-
 data class ApiResponse(
     @SerializedName("results")
-    val results: Results
+    var results: Results
 )
 
 data class Results(
     @SerializedName("shop")
-    val shop: List<Shop>
+    var shop: List<Shop>
 )
 
 data class Shop(
