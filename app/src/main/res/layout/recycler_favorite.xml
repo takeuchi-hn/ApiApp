@@ -27,13 +27,14 @@
         android:padding="8dp"
         android:textColor="@android:color/black"
         android:textSize="15sp"
+        app:layout_constraintVertical_bias="0.3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/favoriteImageView"
         app:layout_constraintStart_toEndOf="@id/imageView"
         app:layout_constraintTop_toTopOf="parent" />
 
 　　　<!--住所-->
-    <TextViews
+    <TextView
         android:id="@+id/addressTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -42,16 +43,18 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:padding="8dp"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@android:color/black"
         android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/favoriteImageView"
         app:layout_constraintStart_toEndOf="@id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/nameTextView"
-        app:layout_constraintVertical_bias="0.7"
-        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintBottom_toBottomOf="parent"
         />
-<!--    app:layout_constraintVertical_bias="0.7"-->
+
+<!--
+        app:layout_constraintTop_toTopOf="@+id/nameTextView"
+        app:layout_constraintHorizontal_weight="1"
+
+-->
 
     <ImageView
         android:id="@+id/favoriteImageView"
