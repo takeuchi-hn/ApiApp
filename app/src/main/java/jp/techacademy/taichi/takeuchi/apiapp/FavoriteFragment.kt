@@ -22,7 +22,8 @@ class FavoriteFragment: Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_favorite, container, false) // fragment_api.xmlが反映されたViewを作成して、returnします
+        // fragment_api.xmlが反映されたViewを作成して、returnします
+        return inflater.inflate(R.layout.fragment_favorite, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,7 +36,10 @@ class FavoriteFragment: Fragment() {
             }
             // Itemをクリックしたとき
             onClickItem = {
-                fragmentCallback?.onClickItem(it)
+                // クリックしたときのitは初期状態だとFavoriteShop型なので
+                // putExtraでShop型で受け渡すためにFavoriteShop -> Shop へオブジェクトの型を変更する必要がある
+                var shop = Shop(CouponUrls(it.url,it.url),it.id,it.imageUrl,it.name,it.address)
+                fragmentCallback?.onClickItem(shop)
             }
         }
         // RecyclerViewの初期化

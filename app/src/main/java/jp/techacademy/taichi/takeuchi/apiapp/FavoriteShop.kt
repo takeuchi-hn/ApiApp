@@ -9,7 +9,7 @@ open class FavoriteShop: RealmObject() {
     var id: String = ""
     var imageUrl: String = ""
     var name: String = ""
-    // TODO できたら住所
+    var address: String = ""
     var url: String = ""
 
     // お気に入りのShopを全件取得

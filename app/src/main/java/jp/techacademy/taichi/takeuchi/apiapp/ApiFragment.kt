@@ -16,17 +16,15 @@ import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.IOException
 
-class ApiFragment: Fragment() {
+//TODO
+//ライフサイクルを使ってMainに戻った時にお気に入りの状態が更新されるようにする
 
+class ApiFragment: Fragment() {
     private val apiAdapter by lazy { ApiAdapter(requireContext()) }
     private val handler = Handler(Looper.getMainLooper())
-
     private var fragmentCallback : FragmentCallback? = null // Fragment -> Activity にFavoriteの変更を通知する
-
     private var page = 0
-
-    // Apiでデータを読み込み中ですフラグ。追加ページの読み込みの時にこれがないと、連続して読み込んでしまうので、それの制御のため
-    private var isLoading = false
+    private var isLoading = false// Apiでデータを読み込み中ですフラグ。追加ページの読み込みの時にこれがないと、連続して読み込んでしまうので、それの制御のため
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
