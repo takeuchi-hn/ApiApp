@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity(), FragmentCallback {
 
     private val viewPagerAdapter by lazy { ViewPagerAdapter(this) }
 
-    // onCreate
+    // onCreate　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -32,9 +32,6 @@ class MainActivity : AppCompatActivity(), FragmentCallback {
         }.attach()
     }
 
-    /*override fun onClickItem(url: String) {
-        WebViewActivity.start(this, url)
-    }*/
     //  クリックしたら　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
     override fun onClickItem(shop: Shop) {
         WebViewActivity.start(this, shop) // クリックしたらShop型を引数としてstartメソッドを実行する

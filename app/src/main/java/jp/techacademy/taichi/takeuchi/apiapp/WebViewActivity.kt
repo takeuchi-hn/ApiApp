@@ -1,6 +1,7 @@
 package jp.techacademy.taichi.takeuchi.apiapp
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -23,27 +24,29 @@ class WebViewActivity: AppCompatActivity() {
         // クーポン画面が立ち上がる
         webView.loadUrl(url)
         // お気に入りの状態を更新
-        if(FavoriteShop.findBy(shop.id) == null) {
+        if(FavoriteShop.findBy(shop.id) != null) {
             mFavoriteState = true
         }else{
             mFavoriteState = false
         }
-        //　★を再描画
+        // ★マークを再描画
         favoriteImageRedraw()
 
         // ★マークをクリックした時
         favoriteImageView.setOnClickListener{
+            Log.d("TIMER","WebViewActivity_★クリック")
             if(mFavoriteState) {
                 // お気に入りに登録済みなので削除
+                showConfirmDeleteFavoriteDialog(shop.id)
             }else{
                 //お気に入り未登録なので登録
-                //onAddFavorite()
-
+                onAddFavorite(shop)
+                favoriteImageRedraw()//　★を再描画
             }
         }
     }
 
-    // o
+    // お気に入り登録用　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
     private fun onAddFavorite(shop: Shop) {
         //Log.d("TIMER","onAddFavorite")
         FavoriteShop.insert(FavoriteShop().apply {
@@ -55,16 +58,37 @@ class WebViewActivity: AppCompatActivity() {
         })
     }
 
-    //override fun onAddFavorite(shop: Shop) {
-    //    //}
-    // ★の再描画用
+    // 「削除しますか？」のダイアログ表示　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+    private fun showConfirmDeleteFavoriteDialog(id: String) {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.delete_favorite_dialog_title)
+            .setMessage(R.string.delete_favorite_dialog_message)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                deleteFavorite(id) // 「OK」ならお気に入りから削除
+                favoriteImageRedraw() // お気に入り状態を確認して、★マーク画像に反映する
+            }
+            .setNegativeButton(android.R.string.cancel) { _, _ -> }
+            .create()
+            .show()
+    }
+
+    // お気に入りから削除する　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+    private fun deleteFavorite(id: String) {
+        FavoriteShop.delete(id)
+    }
+
+    // ★の再描画用　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
     private fun favoriteImageRedraw(){
+        val shop = intent.getSerializableExtra(KEY_URL) as Shop
+        mFavoriteState = FavoriteShop.findBy(shop.id) != null
         if(mFavoriteState){
             favoriteImageView.setImageResource(R.drawable.ic_star)
         } else {
             favoriteImageView.setImageResource(R.drawable.ic_star_border)
         }
     }
+
+    // クリックした店の情報をShop型オブジェクトで受け渡す　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
     companion object {
         private const val KEY_URL = "key_url"
         fun start(activity: Activity, shop: Shop) {
