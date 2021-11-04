@@ -34,7 +34,6 @@ class WebViewActivity: AppCompatActivity() {
 
         // ★マークをクリックした時
         favoriteImageView.setOnClickListener{
-            Log.d("TIMER","WebViewActivity_★クリック")
             if(mFavoriteState) {
                 // お気に入りに登録済みなので削除
                 showConfirmDeleteFavoriteDialog(shop.id)

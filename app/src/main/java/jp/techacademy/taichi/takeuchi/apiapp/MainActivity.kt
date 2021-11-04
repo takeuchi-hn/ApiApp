@@ -78,11 +78,12 @@ class MainActivity : AppCompatActivity(), FragmentCallback {
         private const val VIEW_PAGER_POSITION_API = 0
         private const val VIEW_PAGER_POSITION_FAVORITE = 1
     }
+
     // クーポン画面からメイン画面へ戻った時(=onRestart)に、最新のお気に入り登録状況を画面に反映させる
-/*    override fun onRestart() {
+    override fun onRestart() {
         super.onRestart()
         viewPager2.apply {
             adapter = viewPagerAdapter
         }
-    }*/
+    }
 }
